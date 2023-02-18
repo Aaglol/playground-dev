@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  database:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=
+      - MYSQL_ROOT_PASSWORD=
+    ports:
+      - "3306:3306"
+  ubuntu:
+    image: ubuntu
+    environment:
+      - MYSQL_DATABASE=
+      - MYSQL_ROOT_PASSWORD=
