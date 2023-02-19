@@ -1,36 +1,42 @@
+require('dotenv').config();
 var express = require('express');
 var app = express();
-var mysql = require('mysql');
-var fs = require("fs");
+var cors = require('cors');
+var mysql = require('mysql2');
+var helper = require('./services/helper');
+var dbConfing = require('./services/db_connect');
+var users = require('./profile/user');
 
-var con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
-    insecureAuth : true
-});
+let connection = mysql.createConnection(dbConfing);
 
-con.connect(function(err) {
-    if (err) throw err;
+connection.connect(function(err) {
+    if (err) {
+        console.warn('err', err);
+    }
+
     console.log("Connected!");
 });
 
+app.set('connection', connection)
+app.use(express.urlencoded());
+app.use(express.json());
+app.use(cors());
 
-app.get('/listUsers', function (req, res) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
-        console.log( data );
-        res.end( data );
+app.get('/list', function (req, res) {
+    connection.query('SELECT username from playground_users', function (error, results, fields) {
+        if (error) {
+            console.warn('error', error);
+            return [];
+        }
+        const data = helper.emptyOrRows(results);
+        res.send(data);
     });
 });
 
-
-app.post('createUser', function (req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
-})
+app.post('/create', users);
 
 var server = app.listen(8081, function () {
    var host = server.address().address
    var port = server.address().port
-   console.log("Example app listening at http://%s:%s", host, port)
+   console.log("Listening in at http://%s:%s", host, port)
 });

@@ -2,14 +2,14 @@ version: '3'
 
 services:
   database:
-    image: mysql:8.0
+    image: mysql
+    restart: always
+    container_name: 'mysql'
     environment:
-      - MYSQL_DATABASE=
-      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
-  ubuntu:
-    image: ubuntu
-    environment:
-      - MYSQL_DATABASE=
-      - MYSQL_ROOT_PASSWORD=
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
