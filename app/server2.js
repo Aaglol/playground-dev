@@ -2,10 +2,11 @@ require('dotenv').config();
 var express = require('express');
 var app = express();
 var cors = require('cors');
+const cookieParser = require('cookie-parser')
 
 var dbConnect = require('./services/db_connect');
 var users = require('./profile/user');
-
+const auth = require('../middleware/auth');
 let connection = dbConnect();
 
 if (!app.connection) {
@@ -14,7 +15,11 @@ if (!app.connection) {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin: {customOrigin: 'http://localhost/'}, credentials: true}));
+app.use(cookieParser());
+
+app.use('/user/isloggedin', auth.UserAuth);
+app.use('/user/logout', auth.UserAuth);
 
 app.all('*', users);
 
