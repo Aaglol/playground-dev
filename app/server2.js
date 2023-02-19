@@ -16,8 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.get('/list', users);
-app.post('/create', users);
+app.all('*', users);
 
 var server = app.listen(8081, function () {
    var host = server.address().address;

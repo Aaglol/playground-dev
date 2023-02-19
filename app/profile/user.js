@@ -2,31 +2,27 @@ const express = require('express');
 const router = express.Router();
 var nodeCache = require( "node-cache" );
 
-var helper = require('../services/helper');
+var userModal = require('../../models/user');
 
 let appCache = new nodeCache();
 
-router.get('/list', (req, res) => {
-    let items = appCache.get('playground_users');
+router.get('/user/list', async (req, res) => {
+    let items = appCache.get('playground_users'); 
+    const connection = req.app.get('connection');
+    
     if (!items) {
-        const connection = req.app.get('connection');
-
-        connection.query('SELECT username from playground_users', function (error, results, fields) {
-            if (error) {
-                console.warn('error', error);
-                return [];
-            }
-            items = helper.emptyOrRows(results);
+        items = await userModal(connection).findAll();
+        if (items) {
             appCache.set('playground_users', JSON.stringify(items), 1000);
             res.send(items);
-        });
+        }
     } else {
         items = JSON.parse(items);
         res.send(items);
     }
 });
 
-router.post('/create', (req, res) => { 
+router.post('/user/create', async (req, res) => { 
     
     const { username, password, email } = req.body;
     
@@ -36,8 +32,13 @@ router.post('/create', (req, res) => {
     
     const connection = req.app.get('connection');
     
-    connection.query('INSERT INTO playground_users SET username = ?, password = ?, email = ?, family_id = 1', [username, password, email]);
+    await userModal(connection).create({
+        username,
+        password,
+        email
+    });
 
+    appCache.del('playground_users');
     res.send('bruker opprettet');
 });
 

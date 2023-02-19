@@ -1,15 +1,22 @@
-var mysql = require('mysql2');
-var dbConfing = require('./db_config');
+const Sequelize = require("sequelize");
+var dbConfing = require('../../config/config');
 
 const dbConnect = () => {
-    let connection = mysql.createConnection(dbConfing);
+   
+    const connection =  new Sequelize(
+        dbConfing.development.database,
+        dbConfing.development.username,
+        dbConfing.development.password,
+        {
+            host: dbConfing.development.host,
+            dialect: dbConfing.development.dialect,
+        },
+    );
 
-    connection.connect(function(err) {
-        if (err) {
-            console.warn('err', err);
-        }
-
-        console.log("Connected!");
+    connection.authenticate().then(() => {
+        console.log('Connection has been established successfully.');
+    }).catch((error) => {
+        console.error('Unable to connect to the database: ', error);
     });
 
     return connection
