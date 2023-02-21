@@ -59,7 +59,8 @@ router.post('/user/create', async (req, res) => {
                         httpOnly: true,
                         maxAge: maxAge * 1000,
                     });
-                    res.status(200).send('bruker opprettet: ', user);
+                    const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
+                    res.status(200).send(returnMsg);
                 });
             });
         }
@@ -99,7 +100,8 @@ router.post('/user/login', async (req, res) => {
                         httpOnly: true,
                         expires: new Date(Date.now() + 900000),
                     });
-                    return res.status(200).send(JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}}));
+                    const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
+                    return res.status(200).send(returnMsg);
                 }
                 return res.status(400).send('Kunne ikke logge inn bruker');
             });
