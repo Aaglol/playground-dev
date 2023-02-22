@@ -15,17 +15,19 @@ module.exports = {
         }
     },
     UserAuth: async (req, res, next) => {
-        const token = req.cookies?.jwt;
-        if (token) {
-            jwt.verify(token, jwtSecret, (error, dekodedToken) => {
-                if (error) {
-                    return res.status(401).send('Du har ikke tilgang');
-                }
+        if (Object.hasOwnProperty.call(req.cookies, 'jwt')) {
+            const token = req.cookies.jwt;
+            if (token) {
+                jwt.verify(token, jwtSecret, (error, dekodedToken) => {
+                    if (error) {
+                        return res.status(401).send('Du har ikke tilgang');
+                    }
 
-                next();
-            });
-        } else {
-            return res.status(401).send('Du har ikke tilgang');
+                    next();
+                });
+            } else {
+                return res.status(401).send('Du har ikke tilgang');
+            }
         }
     },
 }
