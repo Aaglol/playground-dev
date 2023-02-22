@@ -14,7 +14,7 @@ services:
       # Opens port 3306 on the container
       - '3306'
     volumes: 
-      - myapp:/playground/sql
+      - playground:/var/lib/mysql
 
 volumes:
-  myapp:
+  playground:
