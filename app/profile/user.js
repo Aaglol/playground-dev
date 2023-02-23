@@ -100,6 +100,10 @@ router.post('/user/login', async (req, res) => {
                         httpOnly: true,
                         expires: new Date(Date.now() + 900000),
                     });
+                    res.cookie("user_id", user.id, {
+                        httpOnly: true,
+                        expires: new Date(Date.now() + 900000),
+                    });
                     const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
                     return res.status(200).send(returnMsg);
                 }
@@ -118,8 +122,29 @@ router.post("/user/logout", (req, res) => {
     res.status(200).send('logout success');
 });
 
-router.post('/user/isloggedin', (req, res) => {
-    return res.status(200).send(JSON.stringify({status: 'success'}));
+router.post('/user/isloggedin', async (req, res) => {
+    let currentUser = {
+        id: 0,
+        username: '',
+        email: '',
+    };
+
+    if (Object.hasOwnProperty.call(req.cookies, 'jwt')) {
+        userId = req.cookies.user_id;
+        
+        const connection = req.app.get('connection');
+
+        const user = await userModal(connection)
+            .findOne({ where: { id: userId }});
+        if (user) {
+            currentUser = {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+            };
+        }
+    }
+    return res.status(200).send(JSON.stringify({status: 'success', data: currentUser}));
 });
 
 module.exports = router;

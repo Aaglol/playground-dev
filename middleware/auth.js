@@ -17,6 +17,7 @@ module.exports = {
     UserAuth: async (req, res, next) => {
         if (Object.hasOwnProperty.call(req.cookies, 'jwt')) {
             const token = req.cookies.jwt;
+
             if (token) {
                 jwt.verify(token, jwtSecret, (error, dekodedToken) => {
                     if (error) {
