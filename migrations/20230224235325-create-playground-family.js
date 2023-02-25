@@ -2,40 +2,37 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('playground_users', {
+    await queryInterface.createTable('playground_families', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      username: {
-        allowNull: false,
-        type: Sequelize.STRING,
-        unique: true,
+      playground_user: {
+        type: Sequelize.INTEGER
       },
-      password: {
-        allowNull: false,
+      family_name: {
         type: Sequelize.STRING
       },
-      email: {
-        allowNull: false,
-        type: Sequelize.STRING,
-        unique: true,
+      family_description: {
+        type: Sequelize.STRING
       },
-      role: {
+      family_status: {
         type: Sequelize.INTEGER,
         defaultValue: 1,
       },
       createdAt: {
-        type: Sequelize.DATE
+        allowNull: false,
+        type: Sequelize.DATEONLY
       },
       updatedAt: {
-        type: Sequelize.DATE
+        allowNull: false,
+        type: Sequelize.DATEONLY
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('playground_users');
+    await queryInterface.dropTable('playground_families');
   }
 };

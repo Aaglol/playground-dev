@@ -82,6 +82,8 @@ router.post('/user/login', async (req, res) => {
     
     const connection = req.app.get('connection');
     
+    console.log('username', username);
+
     try {
         const user = await userModal(connection)
             .findOne({ where: {username}});

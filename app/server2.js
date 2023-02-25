@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 
 var dbConnect = require('./services/db_connect');
 var users = require('./profile/user');
+var family = require('./profile/family');
 const auth = require('../middleware/auth');
 let connection = dbConnect();
 
@@ -21,6 +22,8 @@ app.use(cookieParser());
 app.use('/user/isloggedin', auth.UserAuth);
 app.use('/user/logout', auth.UserAuth);
 
+app.post('/family/create', family);
+app.post('/family/member/create', family);
 app.all('*', users);
 
 var server = app.listen(8081, function () {
