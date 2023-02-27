@@ -20,7 +20,8 @@ module.exports = {
 
             if (token) {
                 jwt.verify(token, jwtSecret, (error, dekodedToken) => {
-                    if (error) {
+
+                    if (error !== null) {
                         return res.status(401).send('Du har ikke tilgang');
                     }
 
@@ -28,7 +29,5 @@ module.exports = {
                 });
             }
         }
-
-        return res.status(401).send('Du har ikke tilgang');
     },
 }

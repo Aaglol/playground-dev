@@ -124,7 +124,7 @@ router.post("/user/logout", (req, res) => {
     res.status(200).send('logout success');
 });
 
-router.post('/user/isloggedin', async (req, res) => {
+router.get('/user/isloggedin', async (req, res) => {
     let currentUser = {
         id: 0,
         username: '',
