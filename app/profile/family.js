@@ -44,8 +44,6 @@ router.post('/family/member/create', async (req, res) => {
     
     const connection = req.app.get('connection');
 
-    console.log('hey');
-
     try {
         console.log('crating family member'); 
 

@@ -74,8 +74,6 @@ router.post('/user/create', async (req, res) => {
 router.post('/user/login', async (req, res) => {
     const { username, password } = req.body;
 
-    
-
     if (!username || !password) {
         return res.status(408).send('Du må fylle ut alle felt');
     }

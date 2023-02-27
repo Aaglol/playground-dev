@@ -26,9 +26,9 @@ module.exports = {
 
                     next();
                 });
-            } else {
-                return res.status(401).send('Du har ikke tilgang');
             }
         }
+
+        return res.status(401).send('Du har ikke tilgang');
     },
 }
