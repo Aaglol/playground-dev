@@ -84,11 +84,10 @@ router.post('/user/login', async (req, res) => {
 
     try {
         const user = await userModal(connection)
-            .findOne({ where: {username}}).catch((e) => {
-                return res.status(408).send('Ingen bruker funnet');
-            });
+            .findOne({ where: {username}});
         if (user) {
             bcrypt.compare(password, user.password).then((result) => {
+              
                 if (result) {
                     const maxAge = 3 * 60 * 60;
                     const token = jwt.sign(
@@ -109,11 +108,10 @@ router.post('/user/login', async (req, res) => {
                     const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
                     return res.status(200).send(returnMsg);
                 }
-                return res.status(400).send('Kunne ikke logge inn bruker');
             });
+        } else {
+            return res.status(408).send('Ingen bruker funnet');
         }
-
-        return res.status(408).send('Ingen bruker funnet');
     }
     catch (error) {
         console.log('Could not login user');
