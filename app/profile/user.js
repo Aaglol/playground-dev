@@ -84,7 +84,9 @@ router.post('/user/login', async (req, res) => {
 
     try {
         const user = await userModal(connection)
-            .findOne({ where: {username}});
+            .findOne({ where: {username}}).catch((e) => {
+                return res.status(408).send('Ingen bruker funnet');
+            });
         if (user) {
             bcrypt.compare(password, user.password).then((result) => {
                 if (result) {
@@ -110,6 +112,8 @@ router.post('/user/login', async (req, res) => {
                 return res.status(400).send('Kunne ikke logge inn bruker');
             });
         }
+
+        return res.status(408).send('Ingen bruker funnet');
     }
     catch (error) {
         console.log('Could not login user');
