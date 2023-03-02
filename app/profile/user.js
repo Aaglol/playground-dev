@@ -35,7 +35,7 @@ router.post('/user/create', async (req, res) => {
     }
     
     const connection = req.app.get('connection');
-    console.log('hei', username);
+    
     try {
         const user = await userModal(connection).findOne({ where: { username }});
         if (!user) {
@@ -45,7 +45,7 @@ router.post('/user/create', async (req, res) => {
                     password: hash,
                     email,
                 }).then((user) => {
-                    const maxAge = 3 * 60 * 60;
+                    const maxAge = 60 * 60 * 60;
                     const token = jwt.sign(
                         {id: user.id, username },
                         secret,
