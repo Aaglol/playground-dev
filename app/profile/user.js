@@ -120,27 +120,25 @@ router.post("/user/logout", (req, res) => {
 });
 
 router.get('/user/isloggedin', async (req, res) => {
-    let currentUser = {
-        id: 0,
-        username: '',
-        email: '',
-    };
     try {
-        if (Object.hasOwnProperty.call(req.cookies, 'jwt')) {
-            userId = req.app.get('user_id');
+        let currentUser = {
+            id: 0,
+            username: '',
+            email: '',
+        };
+        userId = req.app.get('user_id');
+        
+        if (userId) {
+            const connection = req.app.get('connection');
+            const user = await userModal(connection)
+                .findOne({ where: { id: userId }});
             
-            if (userId) {
-                const connection = req.app.get('connection');
-                const user = await userModal(connection)
-                    .findOne({ where: { id: userId }});
-                
-                if (user) {
-                    currentUser = {
-                        id: user.id,
-                        username: user.username,
-                        email: user.email,
-                    };
-                }
+            if (user) {
+                currentUser = {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                };
             }
         }
         return res.status(200).send(JSON.stringify({status: 'success', data: currentUser}));
