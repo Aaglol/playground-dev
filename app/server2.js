@@ -19,9 +19,11 @@ app.use(express.json());
 app.use(cors({origin: {customOrigin: 'http://localhost/'}, credentials: true}));
 app.use(cookieParser());
 
+
 app.use('/user/isloggedin', auth.UserAuth);
 app.use('/user/logout', auth.UserAuth);
 
+app.get('/family/list', family);
 app.post('/family/create', family);
 app.post('/family/member/create', family);
 app.all('*', users);

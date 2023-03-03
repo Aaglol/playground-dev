@@ -79,8 +79,6 @@ router.post('/user/login', async (req, res) => {
     }
     
     const connection = req.app.get('connection');
-    
-    console.log('username', username);
 
     try {
         const user = await userModal(connection)
@@ -101,10 +99,7 @@ router.post('/user/login', async (req, res) => {
                         httpOnly: true,
                         expires: new Date(Date.now() + 900000),
                     });
-                    res.cookie("user_id", user.id, {
-                        httpOnly: true,
-                        expires: new Date(Date.now() + 900000),
-                    });
+                    res.app.set('user_id', user.id);
                     const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
                     return res.status(200).send(returnMsg);
                 }
@@ -130,23 +125,28 @@ router.get('/user/isloggedin', async (req, res) => {
         username: '',
         email: '',
     };
-
-    if (Object.hasOwnProperty.call(req.cookies, 'jwt')) {
-        userId = req.cookies.user_id;
-        
-        const connection = req.app.get('connection');
-
-        const user = await userModal(connection)
-            .findOne({ where: { id: userId }});
-        if (user) {
-            currentUser = {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-            };
+    try {
+        if (Object.hasOwnProperty.call(req.cookies, 'jwt')) {
+            userId = req.app.get('user_id');
+            
+            if (userId) {
+                const connection = req.app.get('connection');
+                const user = await userModal(connection)
+                    .findOne({ where: { id: userId }});
+                
+                if (user) {
+                    currentUser = {
+                        id: user.id,
+                        username: user.username,
+                        email: user.email,
+                    };
+                }
+            }
         }
+        return res.status(200).send(JSON.stringify({status: 'success', data: currentUser}));
+    } catch (e) {
+        return res.status(400);
     }
-    return res.status(200).send(JSON.stringify({status: 'success', data: currentUser}));
 });
 
 module.exports = router;

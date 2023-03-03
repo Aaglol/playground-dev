@@ -5,13 +5,44 @@ const router = express.Router();
 const familyModal = require('../../models/playgroundfamily');
 const familyMembersModal = require('../../models/PlaygroundFamilyMembers');
 
-router.get('/user/list', async (req, res) => {
+router.get('/family/list', async (req, res) => {
   
     const connection = req.app.get('connection');
+    const currentUser = req.app.get('user_id');
   
-    items = await familyModal(connection).findAll();
+    let items = await familyModal(connection).findAll({
+        where: {
+            playground_user: currentUser
+        }
+    });
+
     if (items) {
         res.send(items);
+    }
+});
+router.get('/family/:id/details', async (req, res) => {
+  
+    const connection = req.app.get('connection');
+    const currentUser = req.app.get('user_id');
+  
+    let item = await familyModal(connection).findOne({
+        where: {
+            id: req.params.id,
+            playground_user: currentUser
+        }
+    });
+
+    console.log('items.family: ', item)
+    if (item) {
+        item['members'] = await familyMembersModal.findAll({
+            where: {
+                connected_family: item.id
+            }
+        });
+    }
+
+    if (item) {
+        res.send(item);
     }
 });
 
