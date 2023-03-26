@@ -5,6 +5,9 @@ var cors = require('cors');
 const cookieParser = require('cookie-parser')
 
 var dbConnect = require('./services/db_connect');
+
+app.use(require('express-status-monitor')())
+
 var users = require('./profile/user');
 var family = require('./profile/family');
 const auth = require('../middleware/auth');
