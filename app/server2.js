@@ -19,7 +19,7 @@ if (!app.connection) {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors({origin: {customOrigin: 'http://localhost/'}, credentials: true}));
+app.use(cors({origin: {customOrigin: ['http://79.160.181.14:3000', 'http://localhost:3000/']}, credentials: true}));
 app.use(cookieParser());
 
 
