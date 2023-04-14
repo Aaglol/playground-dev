@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 
-const familyModal = require('../../models/playgroundfamily');
-const familyMembersModal = require('../../models/PlaygroundFamilyMembers');
+const familyModal = require('../models/playgroundfamily');
+const familyMembersModal = require('../models/PlaygroundFamilyMembers');
 
 router.get('/family/list', async (req, res) => {
   

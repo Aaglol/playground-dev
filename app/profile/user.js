@@ -5,7 +5,7 @@ const nodeCache = require( "node-cache" );
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 
-const userModal = require('../../models/user');
+const userModal = require('../models/user');
 
 const appCache = new nodeCache();
 const secret = process.env.JWT_TOKEN;

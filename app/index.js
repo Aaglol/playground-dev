@@ -10,7 +10,7 @@ app.use(require('express-status-monitor')())
 
 var users = require('./profile/user');
 var family = require('./profile/family');
-const auth = require('../middleware/auth');
+const auth = require('./middleware/auth');
 let connection = dbConnect();
 
 if (!app.connection) {
@@ -19,7 +19,7 @@ if (!app.connection) {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors({origin: {customOrigin: ['http://79.160.181.14:3000', 'http://localhost:3000/']}, credentials: true}));
+app.use(cors({origin: {customOrigin: ['https://server.robin-dev.no', 'http://localhost:3000/']}, credentials: true}));
 app.use(cookieParser());
 
 
@@ -31,7 +31,7 @@ app.post('/family/create', family);
 app.post('/family/member/create', family);
 app.all('*', users);
 
-var server = app.listen(8081, function () {
+var server = app.listen(3001, function () {
    var host = server.address().address;
    var port = server.address().port;
    console.log("Listening in at http://" + host + ':' + port);

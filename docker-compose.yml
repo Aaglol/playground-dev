@@ -4,17 +4,38 @@ services:
   database:
     image: mysql
     restart: always
-    container_name: 'mysql'
+    container_name: 'playground-mysql'
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     expose:
-      # Opens port 3306 on the container
-      - '3306'
+      - "3306"
     volumes: 
       - playground:/var/lib/mysql
+  nginx:
+    build: ./nginx
+    image: nginx
+    container_name: 'playground-nginx'
+    ports:
+     - "80:80"
+    expose: 
+     - "80"
+    depends_on:
+      - nodeserver
+  nodeserver:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: 'playground-node'
+    ports:
+      - "3001:3001"
+    expose:
+     - "3001"
+    links:
+      - database
 
 volumes:
   playground:

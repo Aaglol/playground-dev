@@ -1,8 +1,10 @@
 const Sequelize = require("sequelize");
-var dbConfing = require('../../config/config');
+var dbConfing = require('../config/config');
 
 const dbConnect = () => {
-   
+    
+    let attempts = 0;
+
     const connection =  new Sequelize(
         dbConfing.development.database,
         dbConfing.development.username,
@@ -12,14 +14,28 @@ const dbConnect = () => {
             dialect: dbConfing.development.dialect,
         },
     );
+    
+    function connect() {
 
-    connection.authenticate().then(() => {
-        console.log('Connection has been established successfully.');
-    }).catch((error) => {
-        console.error('Unable to connect to the database: ', error);
-    });
+        connection.authenticate().then(() => {
+            console.log('Connection has been established successfully.');
+        }).catch((error) => {
+            attempts++;
 
-    return connection
+            if (attempts < 3) {
+                setTimeout(() => {
+                    console.error('attempt.. ', attempts);
+                    return connect();
+                }, 500);
+            }
+            console.error('Unable to connect to the database: ', error);
+        });
+
+        return connection;
+    }
+
+    return connect();
+    
 }
 
 module.exports = dbConnect;
