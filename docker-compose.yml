@@ -14,16 +14,6 @@ services:
       - "3306"
     volumes: 
       - playground:/var/lib/mysql
-  nginx:
-    build: ./nginx
-    image: nginx
-    container_name: 'playground-nginx'
-    ports:
-     - "80:80"
-    expose: 
-     - "80"
-    depends_on:
-      - nodeserver
   nodeserver:
     build:
       context: ./app
@@ -34,8 +24,17 @@ services:
       - "3001:3001"
     expose:
      - "3001"
-    links:
-      - database
-
+  nginx:
+    build: ./nginx
+    image: nginx
+    container_name: 'playground-nginx'
+    ports:
+     - "80:80"
+     - "443:443"
+    expose: 
+     - "80"
+     - "443"
+    depends_on:
+      - nodeserver
 volumes:
   playground:
