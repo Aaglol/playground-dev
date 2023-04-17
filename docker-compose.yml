@@ -18,7 +18,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
-    image: nodejs
+    image: nodejs:latest
     container_name: 'playground-node'
     ports:
       - "3001:3001"
@@ -36,5 +36,7 @@ services:
      - "443"
     depends_on:
       - nodeserver
+      
 volumes:
   playground:
+  certbot:

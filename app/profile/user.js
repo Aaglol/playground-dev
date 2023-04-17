@@ -72,6 +72,8 @@ router.post('/user/create', async (req, res) => {
 });
 
 router.post('/user/login', async (req, res) => {
+    console.log('hey');
+
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -80,12 +82,14 @@ router.post('/user/login', async (req, res) => {
     
     const connection = req.app.get('connection');
 
+    console.log('ho');
+
     try {
-        const user = await userModal(connection)
-            .findOne({ where: {username}});
+        const user = await userModal(connection).findOne({ where: {username}}).catch((e) => {
+            console.log('Error finding user: ', e);
+        });;
         if (user) {
             bcrypt.compare(password, user.password).then((result) => {
-              
                 if (result) {
                     const maxAge = 3 * 60 * 60;
                     const token = jwt.sign(
@@ -95,14 +99,20 @@ router.post('/user/login', async (req, res) => {
                             expiresIn: maxAge,
                         }
                     );
+              
                     res.cookie("jwt", token, {
                         httpOnly: true,
                         expires: new Date(Date.now() + 900000),
                     });
+                 
                     res.app.set('user_id', user.id);
+               
                     const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
+                
                     return res.status(200).send(returnMsg);
                 }
+            }).catch((e) => {
+                console.log('error: ', e);
             });
         } else {
             return res.status(408).send('Ingen bruker funnet');

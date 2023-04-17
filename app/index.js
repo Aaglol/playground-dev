@@ -19,7 +19,7 @@ if (!app.connection) {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors({origin: {customOrigin: ['https://server.robin-dev.no', 'http://localhost:3000/']}, credentials: true}));
+app.use(cors({origin: {customOrigin: ['https://www.robin-dev.no/', 'http://localhost:3000/']}, credentials: true}));
 app.use(cookieParser());
 
 
