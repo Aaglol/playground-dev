@@ -101,10 +101,9 @@ router.post('/user/login', async (req, res) => {
                     );
               
                     res.cookie("jwt", token, {
-                        httpOnly: true,
                         expires: new Date(Date.now() + 900000),
                     });
-                 
+                    console.log('cookie set.', res);
                     res.app.set('user_id', user.id);
                
                     const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
