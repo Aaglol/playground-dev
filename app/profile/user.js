@@ -102,6 +102,8 @@ router.post('/user/login', async (req, res) => {
               
                     res.cookie("jwt", token, {
                         expires: new Date(Date.now() + 900000),
+                        sameSite: 'none',
+                        secure: true,
                     });
                     console.log('cookie set.', res);
                     res.app.set('user_id', user.id);
