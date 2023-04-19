@@ -17,6 +17,7 @@ if (!app.connection) {
     app.set('connection', connection)
 }
 
+app.set('trust proxy', 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({origin: {customOrigin: ['https://www.robin-dev.no/', 'http://localhost:3000/']}, credentials: true}));
