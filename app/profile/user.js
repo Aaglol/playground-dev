@@ -58,6 +58,7 @@ router.post('/user/create', async (req, res) => {
                     res.cookie("jwt", token, {
                         httpOnly: true,
                         maxAge: maxAge * 1000,
+                        domain: 'robin-dev.no'
                     });
                     const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
                     res.status(200).send(returnMsg);
