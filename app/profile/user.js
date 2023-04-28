@@ -106,8 +106,6 @@ router.post('/user/login', async (req, res) => {
                         sameSite: 'none',
                         secure: true,
                     });
-                    console.log('cookie set.', res);
-                    res.app.set('user_id', user.id);
                
                     const returnMsg = JSON.stringify({status: 'success', data: {id: user.id, username, email: user.email}});
                 
@@ -128,7 +126,6 @@ router.post('/user/login', async (req, res) => {
 
 router.post("/user/logout", (req, res) => {
     res.cookie("jwt", "", { maxAge: "1" })
-    res.app.set('user_id', '');
     res.status(200).send('logout success');
 });
 
