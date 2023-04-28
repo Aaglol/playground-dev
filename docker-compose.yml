@@ -6,7 +6,7 @@ services:
     restart: always
     container_name: 'playground-mysql'
     environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_DATABASE=playground
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
@@ -25,7 +25,9 @@ services:
     expose:
      - "3001"
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     image: nginx
     container_name: 'playground-nginx'
     ports:
@@ -36,7 +38,16 @@ services:
      - "443"
     depends_on:
       - nodeserver
-      
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email {email} -d {domain} --agree-tos
+
 volumes:
   playground:
   certbot:
