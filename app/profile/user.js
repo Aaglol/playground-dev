@@ -128,6 +128,7 @@ router.post('/user/login', async (req, res) => {
 
 router.post("/user/logout", (req, res) => {
     res.cookie("jwt", "", { maxAge: "1" })
+    res.app.set('user_id', '');
     res.status(200).send('logout success');
 });
 
