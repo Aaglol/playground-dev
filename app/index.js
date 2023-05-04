@@ -11,6 +11,7 @@ app.use(require('express-status-monitor')())
 var users = require('./profile/user');
 var family = require('./profile/family');
 const auth = require('./middleware/auth');
+
 let connection = dbConnect();
 
 if (!app.connection) {
@@ -20,7 +21,7 @@ if (!app.connection) {
 app.set('trust proxy', 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors({origin: {customOrigin: ['https://www.robin-dev.no', 'http://localhost:3000']}, credentials: true}));
+app.use(cors({ origin: { customOrigin: ['https://www.robin-dev.no','https://www.robin-dev.no/']}, credentials: true}));
 app.use(cookieParser());
 
 
